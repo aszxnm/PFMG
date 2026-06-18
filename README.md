@@ -1,7 +1,3 @@
-<p align="center">
-  <img width="70%" src="figs/performance.jpg" />
-</p>
-
 # PFMG
 
 This repository contains the PyTorch implementation of PFMG, an audio-driven co-speech gesture generation method built on BEAT-style body, expression, audio, text, emotion, speaker, and PAE motion features.
