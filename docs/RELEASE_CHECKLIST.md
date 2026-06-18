@@ -18,11 +18,31 @@ This file is for maintainers. User-facing instructions are in `README.md`, `docs
 The following checks passed in the private workspace with local data and weights after the PFMG-PAE generation-only cleanup:
 
 ```shell
-python -m py_compile train.py test.py pfmg_tcn_pae_trainer.py models/audio2face.py scripts/prepare_beat.py
+python -m py_compile train.py test.py audio2face_trainer.py pfmg_tcn_pae_trainer.py models/audio2face.py scripts/prepare_beat.py
 python scripts/prepare_beat.py --help
 ```
 
-Training smoke test passed with one validation batch and one training batch:
+Audio2Face training smoke test passed with one validation batch and one training batch. Use batch size 2 or larger because the facial heads use BatchNorm:
+
+```shell
+CUDA_VISIBLE_DEVICES=0 WANDB_MODE=disabled \
+PFMG_WAV2VEC2_MODEL=/path/to/wav2vec2-large-xlsr-53-english \
+PFMG_WAV2VEC2_EMOTION_MODEL=/path/to/wav2vec-english-speech-emotion-recognition \
+python train.py \
+  -c configs/audio2face_4english_15_141.yaml \
+  --root_path . \
+  --wandb_mode disabled \
+  --batch_size 2 \
+  --epochs 1 \
+  --max_train_batches 1 \
+  --max_val_batches 1 \
+  --test_period 9999 \
+  --loader_workers 0 \
+  --gpus 0 \
+  --no_adv_epochs 9999
+```
+
+PFMG-PAE training smoke test passed with one validation batch and one training batch:
 
 ```shell
 CUDA_VISIBLE_DEVICES=0 WANDB_MODE=disabled \
@@ -56,8 +76,9 @@ Pretrained generation smoke passed with `pfmg_tcn_pae.bin` and `--max_test_batch
 ## Clean clone smoke target
 
 ```shell
-python -m py_compile train.py test.py pfmg_tcn_pae_trainer.py models/audio2face.py scripts/prepare_beat.py
+python -m py_compile train.py test.py audio2face_trainer.py pfmg_tcn_pae_trainer.py models/audio2face.py scripts/prepare_beat.py
 python scripts/prepare_beat.py --help
+python train.py -c configs/audio2face_4english_15_141.yaml --root_path . --wandb_mode disabled --batch_size 2 --epochs 1 --max_train_batches 1 --max_val_batches 1
 python train.py -c configs/pfmg_tcn_pae_4english_15_141.yaml --root_path . --wandb_mode disabled --epochs 1 --max_train_batches 1 --max_val_batches 1
 python test.py -c configs/pfmg_tcn_pae_4english_15_141.yaml --root_path . --wandb_mode disabled --max_test_batches 1
 ```

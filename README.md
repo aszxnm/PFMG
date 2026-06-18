@@ -21,6 +21,7 @@ The public release focuses on the PFMG-PAE generation path. Given speech-related
 - [x] PFMG-PAE training code
 - [x] PFMG-PAE inference code
 - [x] BEAT-style dataloader and cache helper
+- [x] Audio2Face training code for producing `face.bin`
 - [x] PFMG-PAE release config and auxiliary checkpoint layout
 - [ ] Public pretrained checkpoint links
 - [ ] Final project page and paper links
@@ -28,9 +29,10 @@ The public release focuses on the PFMG-PAE generation path. Given speech-related
 ## Contents
 
 - `train.py`, `test.py`: common training and motion-generation entry points.
+- `audio2face_trainer.py`: trains the Audio2Face auxiliary model used to produce `face.bin`.
 - `models/`: PFMG-PAE, PFMG-TCN, audio-to-face, and PAE-related model code.
 - `dataloaders/`: BEAT-style LMDB dataloader, vocabulary builder, and motion utilities.
-- `configs/`: release configs for PFMG-PAE and PAE feature preparation.
+- `configs/`: release configs for Audio2Face, PFMG-PAE, and PAE feature preparation.
 - `scripts/prepare_beat.py`: builds statistics, vocabulary, and LMDB caches from prepared BEAT feature folders.
 
 ## Installation
@@ -96,7 +98,32 @@ train/val/test
 
 Commands below assume they are run from this repository root.
 
+### Train Audio2Face
+
+PFMG-TCN loads `face.bin` to generate facial conditions before body-motion generation. To train this auxiliary model from the prepared BEAT cache, run:
+
+```shell
+python train.py \
+  -c configs/audio2face_4english_15_141.yaml \
+  --root_path . \
+  --wandb_mode disabled
+```
+
+The best validation checkpoint is saved as:
+
+```text
+outputs/audio2pose/custom/<audio2face_exp_name>/rec_val.bin
+```
+
+Rename or copy this checkpoint to:
+
+```text
+data/beat_cache/beat_4english_15_141/weights/face.bin
+```
+
 ### Train PFMG-PAE
+
+PFMG-PAE expects the auxiliary `face.bin` and `pfmg_tcn.bin` checkpoints under `data/beat_cache/beat_4english_15_141/weights/`. Then run:
 
 ```shell
 python train.py \
@@ -128,8 +155,9 @@ These generated BVH files can be loaded into Blender with the same visualization
 For checking the environment and data path quickly:
 
 ```shell
-python -m py_compile train.py test.py pfmg_tcn_pae_trainer.py models/audio2face.py scripts/prepare_beat.py
+python -m py_compile train.py test.py audio2face_trainer.py pfmg_tcn_pae_trainer.py models/audio2face.py scripts/prepare_beat.py
 python scripts/prepare_beat.py --help
+python train.py -c configs/audio2face_4english_15_141.yaml --root_path . --wandb_mode disabled --batch_size 2 --epochs 1 --max_train_batches 1 --max_val_batches 1 --test_period 9999 --loader_workers 0 --gpus 0
 python train.py -c configs/pfmg_tcn_pae_4english_15_141.yaml --root_path . --wandb_mode disabled --batch_size 1 --epochs 1 --max_train_batches 1 --max_val_batches 1 --test_period 9999 --loader_workers 0 --gpus 0
 python test.py -c configs/pfmg_tcn_pae_4english_15_141.yaml --root_path . --wandb_mode disabled --max_test_batches 1 --loader_workers 0 --gpus 0
 ```

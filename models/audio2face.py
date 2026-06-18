@@ -230,7 +230,7 @@ class audio2face(nn.Module):
 class ConvDiscriminator(nn.Module):
     def __init__(self, args):
         super().__init__()
-        self.input_size = args.pose_dims
+        self.input_size = args.facial_dims
 
         self.hidden_size = 64
         self.pre_conv = nn.Sequential(
