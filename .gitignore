@@ -1,0 +1,44 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ipynb_checkpoints/
+
+# Environments
+.venv/
+venv/
+conda_env/
+
+# Local data and generated caches
+data/**
+!data/.gitkeep
+outputs/**
+checkpoints/**
+!checkpoints/.gitkeep
+wandb/
+runs/
+logs/
+
+# Large model/data artifacts
+*.bin
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+*.onnx
+*.npy
+*.npz
+*.mdb
+*.lmdb
+*.mp4
+*.mkv
+*.webm
+*.wav
+*.bvh
+*.csv
+
+# Local HuggingFace model checkouts
+wav2vec*/
+*/.git/
