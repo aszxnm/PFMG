@@ -1,4 +1,5 @@
 # PFMG
+Code implement of paper "Towards Unified Co-Speech Gesture Generation via Hierarchical Implicit Periodicity Learning"
 
 This repository contains the PyTorch implementation of PFMG, an audio-driven co-speech gesture generation method built on BEAT-style body, expression, audio, text, emotion, speaker, and PAE motion features.
 
