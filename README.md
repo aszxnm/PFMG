@@ -4,13 +4,7 @@ This repository contains the PyTorch implementation of PFMG, an audio-driven co-
 
 The public release focuses on the PFMG-PAE generation path. Given speech-related conditions and PAE features, the model generates upper-body gesture motion and writes BVH-compatible result files for visualization.
 
-[Project Page: TBD](#) | [Paper: TBD](#) | [Pretrained Models: TBD](docs/MODEL_ZOO.md) | [Data Preparation](docs/DATA.md)
-
-## News
-
-- **[2026/06]** Release training and inference code for PFMG.
-- **[2026/06]** Add a clean BEAT-style cache preparation script in `scripts/prepare_beat.py`.
-- **[TBD]** Public pretrained checkpoints will be released after final hosting and license review.
+[Pretrained Models: TBD](docs/MODEL_ZOO.md) | [Data Preparation](docs/DATA.md)
 
 ## Release Plans
 
@@ -146,34 +140,9 @@ outputs/audio2pose/custom/<exp_name>/9999/
 
 These generated BVH files can be loaded into Blender with the same visualization flow used by BEAT.
 
-## Quick smoke test
-
-For checking the environment and data path quickly:
-
-```shell
-python -m py_compile train.py test.py audio2face_trainer.py pfmg_tcn_pae_trainer.py models/audio2face.py scripts/prepare_beat.py
-python scripts/prepare_beat.py --help
-python train.py -c configs/audio2face_4english_15_141.yaml --root_path . --wandb_mode disabled --batch_size 2 --epochs 1 --max_train_batches 1 --max_val_batches 1 --test_period 9999 --loader_workers 0 --gpus 0
-python train.py -c configs/pfmg_tcn_pae_4english_15_141.yaml --root_path . --wandb_mode disabled --batch_size 1 --epochs 1 --max_train_batches 1 --max_val_batches 1 --test_period 9999 --loader_workers 0 --gpus 0
-python test.py -c configs/pfmg_tcn_pae_4english_15_141.yaml --root_path . --wandb_mode disabled --max_test_batches 1 --loader_workers 0 --gpus 0
-```
-
 ## Acknowledgements
 
 This codebase builds on BEAT / PantoMatrix audio-to-gesture code and the BEAT 2022 CaMN baseline. We thank the authors of BEAT, CaMN, HuggingFace Transformers, timm, pymo, and related open-source projects. See `NOTICE.md` for details.
-
-## Citation
-
-If you find this code useful for your research, please cite the PFMG paper. The final BibTeX will be added before public release.
-
-```bibtex
-@article{pfmg2026,
-  title   = {PFMG},
-  author  = {TBD},
-  journal = {TBD},
-  year    = {2026}
-}
-```
 
 ## License
 
