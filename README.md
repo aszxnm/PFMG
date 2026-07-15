@@ -5,8 +5,6 @@ This repository contains the PyTorch implementation of PFMG, an audio-driven co-
 
 The public release focuses on the PFMG-PAE generation path. Given speech-related conditions and PAE features, the model generates upper-body gesture motion and writes BVH-compatible result files for visualization.
 
-[Pretrained Models: TBD](docs/MODEL_ZOO.md) | [Data Preparation](docs/DATA.md)
-
 ## Release Plans
 
 - [x] PFMG-PAE training code
